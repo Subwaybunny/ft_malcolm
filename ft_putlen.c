@@ -6,11 +6,11 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:20:30 by jragot            #+#    #+#             */
-/*   Updated: 2021/09/15 22:56:30 by jragot           ###   ########.fr       */
+/*   Updated: 2021/09/27 14:47:31 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <unistd.h>
+#include "ft_malcolm.h"
 
 void	ft_putlen(unsigned char* str, ssize_t len)
 {

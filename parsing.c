@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:21:14 by jragot            #+#    #+#             */
-/*   Updated: 2021/09/15 22:56:25 by jragot           ###   ########.fr       */
+/*   Updated: 2021/09/28 17:20:58 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,30 @@ void	feed_bin(unsigned char *bin, const char *hex)
 	while (*tab)
 		*bin++ = hextobyte(*tab++);
 }
+/*
+void	feed_bin(unsigned char *bin, const char *hex)
+{
+	ssize_t size = 17;
+	unsigned char tmp[17];
+	char **tab = NULL;
 
+	bzero(tmp, 17);		// LIBC
+	while (size)
+	{
+		tmp[size] = tolower(hex[size]); // LIBC
+		--size;
+	}
+	tab = ft_split(hex, ':');
+	while (*tab)
+		*bin++ = hextobyte(*tab++);
+}
+*/
 void	print_mac(unsigned char *bin)
 {
 	printf("MAC address: %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\n", bin[0], bin[1], bin[2], bin[3], bin[4], bin[5]);
 }
 
-
+/*
 int main(int ac, char **av)
 {
 	if (ac == 2)
@@ -96,3 +113,4 @@ int main(int ac, char **av)
 	}
 	return (0);
 }
+*/
