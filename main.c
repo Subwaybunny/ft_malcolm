@@ -103,7 +103,7 @@ void	print_headers(unsigned char *buffer)
 void	print_arp(unsigned char*, ssize_t, int);
 
 
-void	jesaispas(unsigned char *buffer)
+void	jesaispas(unsigned char *buffer, ssize_t buflen)
 {
 	struct arphdr *arp = (struct arphdr *)(buffer);
 /*	struct arphdr *data;
@@ -116,9 +116,9 @@ void	jesaispas(unsigned char *buffer)
 	printf("ar_op: %01x\n", arp->ar_op);
 
 	unsigned char *verif = (unsigned char *)arp;
-	print_arp(verif, strlen((const char*)verif), 1);
+//	printf("strlen verif: %d\n", strlen((const char*)verif));
+	print_arp(verif, buflen, 1);
 }
-
 
 void	print_arp(unsigned char *buffer, ssize_t buflen, int stop)
 {
@@ -131,8 +131,8 @@ void	print_arp(unsigned char *buffer, ssize_t buflen, int stop)
 	while (i < buflen)
 		printf("%02x ", buffer[i++]);
 	printf("\n---------------\n");
-	if (!stop)
-		jesaispas(buffer+sizeof(struct ethhdr));
+	if (stop == 0)
+		jesaispas(buffer+sizeof(struct ethhdr), buflen-sizeof(struct ethhdr));
 }
 
 
