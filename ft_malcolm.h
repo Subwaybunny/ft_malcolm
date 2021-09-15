@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:20:48 by jragot            #+#    #+#             */
-/*   Updated: 2021/09/15 21:21:03 by jragot           ###   ########.fr       */
+/*   Updated: 2021/09/15 21:37:46 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@
 # include "ft_split.c"
 # include "count_tab.c"
 # include "ft_putlen.c"
-
-
 
 struct arp_ip
 {
