@@ -129,7 +129,7 @@ unsigned char	*craft_arp(const char *sip, unsigned char *raw_arp)
 void	process_arp(unsigned char *buffer, ssize_t buflen)
 {
 	struct arp_ip *arp = (struct arp_ip *)(buffer); /* We create this structure specific to IP protocol for later */
-	printf("(%l bytes read from socket)\n----ARP PAYLOAD----:\n", buflen);
+	printf("(%ld bytes read from socket)\n----ARP PAYLOAD----:\n", buflen);
 
 	buffer += sizeof(struct arphdr);
 	printf("|-Sender HW address: %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\n", buffer[0], buffer[1], buffer[2], buffer[3], buffer[4], buffer[5]);
