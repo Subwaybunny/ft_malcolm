@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lnezonde <lnezonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/09 13:21:03 by lnezonde          #+#    #+#             */
-/*   Updated: 2019/10/15 15:52:33 by lnezonde         ###   ########.fr       */
+/*   Created: 2021/09/15 21:08:50 by jragot            #+#    #+#             */
+/*   Updated: 2021/09/15 21:19:32 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
- 
-//#include "libft.h"
+
+#include "ft_malcolm.h"
  
 static int	strlen_split_i(char const *s, char c)
 {
@@ -20,16 +20,16 @@ static int	strlen_split_i(char const *s, char c)
 	i = 0;
 	size = 0;
 	while (s[i] && s[i] == c)
-		i++;
+		++i;
 	while (s[i])
 	{
 		while (s[i] && s[i] == c)
-			i++;
+			++i;
 		if (s[i] == '\0')
 			return (size);
 		while (s[i] && s[i] != c)
-			i++;
-		size++;
+			++i;
+		++size;
 	}
 	return (size);
 }
@@ -40,7 +40,7 @@ static int	strlen_split_j(char const *s, char c, int i)
  
 	size = 0;
 	while (s[i] && s[i++] != c)
-		size++;
+		++size;
 	return (size);
 }
  
@@ -52,8 +52,8 @@ static void	fill_tab(char const *s, char *tab, int k, char c)
 	while (s[k] && s[k] != c)
 	{
 		tab[j] = s[k];
-		j++;
-		k++;
+		++j;
+		++k;
 	}
 	tab[j] = '\0';
 }
@@ -76,7 +76,7 @@ char		**ft_split(char const *s, char c)
 	while (i < len_i)
 	{
 		while (s[k] && s[k] == c)
-			k++;
+			++k;
 		len_j = strlen_split_j(s, c, k);
 		if (!(tab[i] = malloc(sizeof(char*) * (len_j + 1))))
 			return (NULL);

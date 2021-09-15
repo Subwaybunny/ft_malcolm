@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/15 21:21:52 by jragot            #+#    #+#             */
+/*   Updated: 2021/09/15 21:22:38 by jragot           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+/*
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -15,6 +28,7 @@
 #include "ft_split.c"
 #include "count_tab.c"
 #include "ft_putlen.c"
+*/
 #include "ft_malcolm.h"
 
 void	exit_error(const char *message)

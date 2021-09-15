@@ -1,9 +1,21 @@
-#include <ctype.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "ft_split.c"
-#include "count_tab.c"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/15 21:21:14 by jragot            #+#    #+#             */
+/*   Updated: 2021/09/15 21:23:29 by jragot           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+//#include <ctype.h>
+//#include <string.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include "ft_split.c"
+//#include "count_tab.c"
 
 int	isbase16(char c)
 {
@@ -37,13 +49,11 @@ int     is_valid_mac(const char *addr)
 
 char	hextobyte(const char *hex)
 {
-//	printf("\nhex value: %s", hex);
 	/* Translate ASCII value into binary */
 	char left = (hex[0] < 'a') ? hex[0] - 48 : hex[0] - 87;
 	char right = (hex[1] < 'a') ? hex[1] - 48 : hex[0] - 87;
 
 	/* Join the two values into a single byte */
-//	printf("\ncurrent byte:  %02x\n", (left << 4) + right);
 	return ((left << 4) + right);
 }
 
@@ -62,8 +72,6 @@ void	feed_bin(unsigned char *bin, const char *hex)
 	tab = ft_split(hex, ':');
 	while (*tab)
 		*bin++ = hextobyte(*tab++);
-//	while (size <= 17)
-//		tmp[size] = tmp[size++] - 87;
 }
 
 void	print_mac(unsigned char *bin)
