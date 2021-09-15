@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:20:48 by jragot            #+#    #+#             */
-/*   Updated: 2021/09/15 21:37:46 by jragot           ###   ########.fr       */
+/*   Updated: 2021/09/15 22:56:29 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include "count_tab.c"
 # include "ft_putlen.c"
 
+
 struct arp_ip
 {
     unsigned short int ar_hrd;          /* Format of hardware address.  */
@@ -33,20 +34,20 @@ struct arp_ip
     unsigned char ar_hln;               /* Length of hardware address.  */
     unsigned char ar_pln;               /* Length of protocol address.  */
     unsigned short int ar_op;           /* ARP opcode (command).  */
-    unsigned char ar_sha[ETH_ALEN];     /* Sender hardware address.  */
+//    unsigned char ar_sha[ETH_ALEN];     /* Sender hardware address.  */
     unsigned char ar_sip[4];            /* Sender IP address.  */
-    unsigned char ar_tha[ETH_ALEN];     /* Target hardware address.  */
+//    unsigned char ar_tha[ETH_ALEN];     /* Target hardware address.  */
     unsigned char ar_tip[4];            /* Target IP address.  */
 };
 
-size_t          count_tab(char **tab);
-int             isbase16(char c);
+size_t          count_tab(char **tab);                      // MOVE TO LIBfT
+int             isbase16(char c);                           // MOVE TO LIBFT
 int             is_valid_mac(const char *addr);
 int             is_valid_ipv4(const char *addr);
-void            ft_putlen(unsigned char* str, ssize_t len);
+void            ft_putlen(unsigned char* str, ssize_t len); // MOVE TO LIBFT
 void	        feed_bin(unsigned char *bin, const char *hex);
 void	        print_mac(unsigned char *bin);
-void	        exit_error(const char *message);
+void	        exit_error(const char *message);            // MOVE TO LIBFT
 void	        requirements(int ac, char **av);
 void            process_ethernet(unsigned char *buffer, ssize_t buflen);
 void            process_arp(unsigned char *buffer, ssize_t buflen);
