@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:21:52 by jragot            #+#    #+#             */
-/*   Updated: 2021/09/15 21:22:38 by jragot           ###   ########.fr       */
+/*   Updated: 2021/09/15 21:36:11 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ unsigned char	*craft_arp(const char *sip, unsigned char *raw_arp)
 void	process_arp(unsigned char *buffer, ssize_t buflen)
 {
 	struct arp_ip *arp = (struct arp_ip *)(buffer); /* We create this structure specific to IP protocol for later */
-	printf("(%ld bytes read from socket)\n----ARP PAYLOAD----:\n", buflen);
+	printf("(%d bytes read from socket)\n----ARP PAYLOAD----:\n", (unsigned int)buflen);
 
 	buffer += sizeof(struct arphdr);
 	printf("|-Sender HW address: %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\n", buffer[0], buffer[1], buffer[2], buffer[3], buffer[4], buffer[5]);
