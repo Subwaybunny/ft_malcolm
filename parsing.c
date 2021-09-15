@@ -18,13 +18,13 @@ int     is_valid_mac(const char *addr)
         int i = 0;
 
         tab = ft_split(addr, ':');
-	if (strlen(addr) != 17)
+	if (strlen(addr) != 17)		// LIBC
 		return (-1);
         if (count_tab(tab) != 6)
                 return (-2);
         while (*tab)
         {
-                if (!(strlen(*tab) && strlen(*tab) == 2))
+                if (!(strlen(*tab) && strlen(*tab) == 2))	// LIBC
                         return (-3);
                 i = 0;
                 while (tab[i])
@@ -53,10 +53,10 @@ void	feed_bin(unsigned char *bin, const char *hex)
 	unsigned char tmp[17];
 	char **tab = NULL;
 
-	bzero(tmp, 17);
+	bzero(tmp, 17);		// LIBC
 	while (size)
 	{
-		tmp[size] = tolower(hex[size]);
+		tmp[size] = tolower(hex[size]); // LIBC
 		--size;
 	}
 	tab = ft_split(hex, ':');
