@@ -2,15 +2,16 @@ NAME = ft_malcolm
 
 CC = gcc
 
-#CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
 HEADER = ft_malcolm.h
 
-SRC = main.c \
-		misc.c \
+SRC = 	misc.c \
 		ft_split.c \
 		count_tab.c \
-		ft_putlen.c
+		ft_putlen.c \
+		parsing.c \
+		main.c	
 
 OBJ = $(SRC:.c=.o)
 
