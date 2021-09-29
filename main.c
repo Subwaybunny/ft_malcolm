@@ -6,34 +6,11 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:21:52 by jragot            #+#    #+#             */
-/*   Updated: 2021/09/29 05:13:42 by jragot           ###   ########.fr       */
+/*   Updated: 2021/09/29 15:34:14 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_malcolm.h"
-
-int	is_valid_ipv4(const char *addr)
-{
-	char **tab = NULL;
-	int i = 0;
-
-	tab = ft_split(addr, '.');
-	if (count_tab(tab) != 4)
-		return (-1);
-	while (*tab)
-	{
-		if (!(strlen(*tab) && strlen(*tab) <= 3)) // *** LIBC
-			return (-2);
-		i = 0;
-		while (tab[i])
-			if (!(isdigit(*tab[i++])))	// *** LIBC
-				return (-3);
-		if (atoi(*tab) < 0 || atoi(*tab) > 255) // *** LIBC
-			return (-4);
-		++tab;
-	}
-	return (0);
-}
 
 struct hostent *gethost(const char *name)
 {

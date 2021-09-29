@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 19:28:05 by jragot            #+#    #+#             */
-/*   Updated: 2021/08/15 21:15:22 by jragot           ###   ########.fr       */
+/*   Updated: 2021/09/29 15:40:11 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,52 @@ void	exit_error(const char *message)
 	exit(0);				// *** LIBC
 }
 
+int	is_valid_ipv4(const char *addr)
+{
+	char **tab = NULL;
+	int i = 0;
+
+	tab = ft_split(addr, '.');
+	if (count_tab(tab) != 4)
+		return (-1);
+	while (*tab)
+	{
+		if (!(strlen(*tab) && strlen(*tab) <= 3)) // *** LIBC
+			return (-2);
+		i = 0;
+		while (tab[i])
+			if (!(isdigit(*tab[i++])))	// *** LIBC
+				return (-3);
+		if (atoi(*tab) < 0 || atoi(*tab) > 255) // *** LIBC
+			return (-4);
+		++tab;
+	}
+	return (0);
+}
+
+int     is_valid_mac(const char *addr)
+{
+        char **tab = NULL;
+        int i = 0;
+
+        tab = ft_split(addr, ':');
+	if (strlen(addr) != 17)		// LIBC
+		return (-1);
+        if (count_tab(tab) != 6)
+                return (-2);
+        while (*tab)
+        {
+                if (!(strlen(*tab) && strlen(*tab) == 2))	// LIBC
+                        return (-3);
+                i = 0;
+                while (tab[i])
+                        if (!(isbase16(*tab[i++])))
+                                return (-4);
+                ++tab;
+        }
+        return (0);
+}
+
 void	requirements(int ac, char **av)
 {
 	if (ac != 5)
@@ -38,6 +84,10 @@ void	requirements(int ac, char **av)
 		exit_error("Invalid source IP (numbers-and-dots check)");
 	if (is_valid_ipv4(av[3]) != 0)
 		exit_error("Invalid target IP (numbers-and-dots check)");
+	if (is_valid_mac(av[2]) != 0)
+		exit_error("Invalid source MAC");
+	if (is_valid_mac(av[4]) != 0)
+		exit_error("Invalid target MAC");
 }
 
 void	print_raw_data(unsigned char *buffer)
