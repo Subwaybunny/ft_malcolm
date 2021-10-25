@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:21:52 by jragot            #+#    #+#             */
-/*   Updated: 2021/09/29 15:34:14 by jragot           ###   ########.fr       */
+/*   Updated: 2021/10/23 02:37:18 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,18 @@ struct ifaddrs *getinterface(struct ifaddrs *iflist,const char *name)
 	memcpy(output, &frame, 28);					// *** LIBC
 	memcpy(output+sizeof(frame), &packet, sizeof(packet));
 	return (output);
-} */
+} 
+
+void	print_addr_set(struct addr_set addresses)
+{
+	printf("-------\nSIP: %.2x.%.2x.%.2x.%.2x\n-------\n", addresses.sip[0], addresses.sip[1], addresses.sip[2], addresses.sip[3]);
+	printf("-------\nTIP: %.2x.%.2x.%.2x.%.2x\n-------\n", addresses.tip[0], addresses.tip[1], addresses.tip[2], addresses.tip[3]);
+
+}*/
 
 unsigned char	*craft_arp(struct addr_set addresses, unsigned char *output)
 {
+//	print_addr_set(addresses);
 	struct ethhdr frame;
 	struct arp_ip packet;
 	
@@ -72,11 +80,11 @@ unsigned char	*craft_arp(struct addr_set addresses, unsigned char *output)
 	memcpy(packet.ar_pro, "\x08\x00", 2);
 	packet.ar_hln = 6;
 	packet.ar_pln = 4;
-	memcpy(packet.ar_op, "\x00\x03", 2);
+	memcpy(packet.ar_op, "\x00\x03", 2); // EDIT HERE ARP REQ/REPLY/ANNOUNCE ETC
 	memcpy(packet.ar_sha, addresses.smac, 6);
-	memcpy(packet.ar_sip, &addresses.sip, 2);
-	memcpy(packet.ar_tha, addresses.tmac, 2);
-	memcpy(packet.ar_tip, &addresses.tip, 2);
+	memcpy(packet.ar_sip, &addresses.sip, 4);
+	memcpy(packet.ar_tha, addresses.tmac, 6);
+	memcpy(packet.ar_tip, &addresses.tip, 4);
 	memcpy(output, &frame, 28);					// *** LIBC
 	memcpy(output+sizeof(frame), &packet, sizeof(packet));
 	return (output);
@@ -158,13 +166,13 @@ int	main(int ac, char **av)
 	ssize_t buflen = 0;
 
 /* HERE CHECK THAT MAC AND IP ARE VALID (maybe already done in requirements() */
-	memset(&addresses, 0, sizeof(addresses));
+	memset(&addresses, 0, sizeof(addresses)); // *** LIBC
 	addresses.sip = inet_addr(av[1]);
 	feed_bin(addresses.smac, av[2]);
 	addresses.tip = inet_addr(av[3]);
 	feed_bin(addresses.tmac, av[4]);
-	craft_arp(addresses, output);
-	process_ethernet(output, 42);
+	craft_arp(addresses, output); // JUST FOR TEST ?
+	process_ethernet(output, 42); // JUST FOR TESR ?
 	printf("------------------------------------\n");
 	while (1)
 	{

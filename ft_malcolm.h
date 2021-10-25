@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:20:48 by jragot            #+#    #+#             */
-/*   Updated: 2021/08/15 21:36:25 by jragot           ###   ########.fr       */
+/*   Updated: 2021/09/29 16:57:08 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,6 @@
 # include <net/ethernet.h>
 # include <net/if_arp.h>
 # include <ifaddrs.h>
-
-/*
-struct arp_ip
-{
-    unsigned short int ar_hrd;           Format of hardware address.  
-    unsigned short int ar_pro;           Format of protocol address.  
-    unsigned char ar_hln;                Length of hardware address.  
-    unsigned char ar_pln;                Length of protocol address.  
-    unsigned short int ar_op;            ARP opcode (command).  
-//    unsigned char ar_sha[ETH_ALEN];    Sender hardware address.  
-    unsigned char ar_sip[4];             Sender IP address.  
-//    unsigned char ar_tha[ETH_ALEN];    Target hardware address.  
-    unsigned char ar_tip[4];             Target IP address.  
-};*/
 
 struct arp_ip
 {
