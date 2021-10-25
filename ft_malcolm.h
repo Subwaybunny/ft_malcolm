@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:20:48 by jragot            #+#    #+#             */
-/*   Updated: 2021/09/29 16:57:08 by jragot           ###   ########.fr       */
+/*   Updated: 2021/10/25 18:32:13 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ struct addr_set
 {
     unsigned char tmac[6];           /* Target MAC address */
     unsigned char smac[6];           /* Source MAC address */
-    in_addr_t tip;                  /* Target IP address */
-    in_addr_t sip;                  /* Source IP address */
+    in_addr_t tip;                   /* Target IP address */
+    in_addr_t sip;                   /* Source IP address */
 };
 
 size_t          count_tab(char **tab);                      // MOVE TO LIBfT

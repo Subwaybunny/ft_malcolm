@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:21:52 by jragot            #+#    #+#             */
-/*   Updated: 2021/10/23 02:37:18 by jragot           ###   ########.fr       */
+/*   Updated: 2021/10/25 18:57:14 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,14 @@ unsigned char	*craft_arp(struct addr_set addresses, unsigned char *output)
 	return (output);
 }
 
+void	arp_reply(struct arp_ip request)
+{
+	printf("\nARP REQUEST DETECTED FROM %d.%d.%d.%d\n", request.ar_sip[0], request.ar_sip[1], request.ar_sip[2], request.ar_sip[3]);
+}
+
 void	process_arp(unsigned char *buffer, ssize_t buflen)
 {
-	struct arp_ip *arp = (struct arp_ip *)(buffer); /* We create this structure specific to IP protocol for later */
+	struct arp_ip arp = (struct arp_ip)(buffer); /* We create this structure specific to IP protocol for later */
 	printf("(%d bytes read from socket)\n----ARP PAYLOAD----:\n", (unsigned int)buflen);
 
 	buffer += sizeof(struct arphdr);
@@ -106,6 +111,10 @@ void	process_arp(unsigned char *buffer, ssize_t buflen)
 	buffer += arp->ar_hln;
 	printf("|-Target IP address: %d.%d.%d.%d\n", buffer[0], buffer[1], buffer[2], buffer[3]);
 	printf("\n");
+
+	printf("##### OPCODE: %d %d #####\n", arp.ar_op[0], arp.ar_op[1]);
+	if (arp.ar_op == "\x00\x01") /* We check if this is an ARP REQUEST */
+		arp_reply(arp);
 }
 
 void	process_ethernet(unsigned char *buffer, ssize_t buflen)
@@ -172,7 +181,7 @@ int	main(int ac, char **av)
 	addresses.tip = inet_addr(av[3]);
 	feed_bin(addresses.tmac, av[4]);
 	craft_arp(addresses, output); // JUST FOR TEST ?
-	process_ethernet(output, 42); // JUST FOR TESR ?
+	process_ethernet(output, 42); // JUST FOR TEST ?
 	printf("------------------------------------\n");
 	while (1)
 	{
