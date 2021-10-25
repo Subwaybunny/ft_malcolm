@@ -6,11 +6,13 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:21:52 by jragot            #+#    #+#             */
-/*   Updated: 2021/10/25 18:57:14 by jragot           ###   ########.fr       */
+/*   Updated: 2021/10/25 19:55:43 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_malcolm.h"
+
+struct addr_set g_addresses;
 
 struct hostent *gethost(const char *name)
 {
@@ -65,39 +67,44 @@ void	print_addr_set(struct addr_set addresses)
 
 }*/
 
-unsigned char	*craft_arp(struct addr_set addresses, unsigned char *output)
+unsigned char	*craft_arp(unsigned char *output)
 {
-//	print_addr_set(addresses);
+//	print_addr_set(g_addresses);
 	struct ethhdr frame;
 	struct arp_ip packet;
 	
 	memset(&frame, 0, sizeof(frame));			// *** LIBC
 	memset(&packet, 0, sizeof(packet));			// *** LIBC
-	memcpy(frame.h_dest, addresses.tmac, 6); // *** LIBC
-	memcpy(frame.h_source, addresses.smac, 6); // *** LIBC
+	memcpy(frame.h_dest, g_addresses.tmac, 6); // *** LIBC
+	memcpy(frame.h_source, g_addresses.smac, 6); // *** LIBC
 	memcpy(&frame.h_proto, "\x08\x06", 2);		// *** LIBC
 	memcpy(packet.ar_hrd, "\x00\x01", 2);
 	memcpy(packet.ar_pro, "\x08\x00", 2);
 	packet.ar_hln = 6;
 	packet.ar_pln = 4;
-	memcpy(packet.ar_op, "\x00\x03", 2); // EDIT HERE ARP REQ/REPLY/ANNOUNCE ETC
-	memcpy(packet.ar_sha, addresses.smac, 6);
-	memcpy(packet.ar_sip, &addresses.sip, 4);
-	memcpy(packet.ar_tha, addresses.tmac, 6);
-	memcpy(packet.ar_tip, &addresses.tip, 4);
+	memcpy(packet.ar_op, "\x00\x02", 2); // ARP REPLY OPCODE
+	memcpy(packet.ar_sha, g_addresses.smac, 6);
+	memcpy(packet.ar_sip, &g_addresses.sip, 4);
+	memcpy(packet.ar_tha, g_addresses.tmac, 6);
+	memcpy(packet.ar_tip, &g_addresses.tip, 4);
 	memcpy(output, &frame, 28);					// *** LIBC
 	memcpy(output+sizeof(frame), &packet, sizeof(packet));
 	return (output);
 }
 
-void	arp_reply(struct arp_ip request)
+void	arp_reply(struct arp_ip *request) // Maybe we can remove the function parameter
 {
-	printf("\nARP REQUEST DETECTED FROM %d.%d.%d.%d\n", request.ar_sip[0], request.ar_sip[1], request.ar_sip[2], request.ar_sip[3]);
+	unsigned char output[42];
+	printf("(ARP REQUEST DETECTED FROM %d.%d.%d.%d)\n", request->ar_sip[0], request->ar_sip[1], request->ar_sip[2], request->ar_sip[3]);
+	craft_arp(output);
+	printf("------ REPLYING: ------\n");
+	process_ethernet(output, 42);
+	printf("------------------------------------\n");
 }
 
 void	process_arp(unsigned char *buffer, ssize_t buflen)
 {
-	struct arp_ip arp = (struct arp_ip)(buffer); /* We create this structure specific to IP protocol for later */
+	struct arp_ip *arp = (struct arp_ip *)(buffer); /* We create this structure specific to IP protocol for later */
 	printf("(%d bytes read from socket)\n----ARP PAYLOAD----:\n", (unsigned int)buflen);
 
 	buffer += sizeof(struct arphdr);
@@ -110,11 +117,11 @@ void	process_arp(unsigned char *buffer, ssize_t buflen)
 	printf("|-Target HW address: %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\n", buffer[0], buffer[1], buffer[2], buffer[3], buffer[4], buffer[5]);
 	buffer += arp->ar_hln;
 	printf("|-Target IP address: %d.%d.%d.%d\n", buffer[0], buffer[1], buffer[2], buffer[3]);
-	printf("\n");
-
-	printf("##### OPCODE: %d %d #####\n", arp.ar_op[0], arp.ar_op[1]);
-	if (arp.ar_op == "\x00\x01") /* We check if this is an ARP REQUEST */
-		arp_reply(arp);
+	buffer += arp->ar_pln;
+	printf("|- OPcode: %.2x:%.2x\n", arp->ar_op[0], arp->ar_op[1]);
+	if (arp->ar_op[0] == 0 && arp->ar_op[1] == 1) /* We check if this is an ARP REQUEST */
+		if (ntohs(inet_addr((char *)arp->ar_sip)) == g_addresses.tip) // NEED TO FIX THIS*************
+			arp_reply(arp);
 }
 
 void	process_ethernet(unsigned char *buffer, ssize_t buflen)
@@ -143,9 +150,9 @@ int	main(int ac, char **av)
 //	struct hostent *host = NULL;
 	struct ifaddrs *iflist = NULL;
 	struct ifaddrs *interface = NULL;
-	struct addr_set addresses;
+//	struct addr_set addresses; MOVED TO A GLOBAL VARIABLE
 	unsigned char buffer[65536];
-	unsigned char output[42];
+// 	unsigned char output[42];  (MOVED)
 
 //	in_addr_t	source_ip = 0;
 //	in_addr_t	target_ip = 0;
@@ -175,14 +182,13 @@ int	main(int ac, char **av)
 	ssize_t buflen = 0;
 
 /* HERE CHECK THAT MAC AND IP ARE VALID (maybe already done in requirements() */
-	memset(&addresses, 0, sizeof(addresses)); // *** LIBC
-	addresses.sip = inet_addr(av[1]);
-	feed_bin(addresses.smac, av[2]);
-	addresses.tip = inet_addr(av[3]);
-	feed_bin(addresses.tmac, av[4]);
-	craft_arp(addresses, output); // JUST FOR TEST ?
-	process_ethernet(output, 42); // JUST FOR TEST ?
-	printf("------------------------------------\n");
+	memset(&g_addresses, 0, sizeof(g_addresses)); // *** LIBC
+	g_addresses.sip = inet_addr(av[1]);
+	feed_bin(g_addresses.smac, av[2]);
+	g_addresses.tip = inet_addr(av[3]);
+	feed_bin(g_addresses.tmac, av[4]);
+	//(MOVED TO arp_reply) craft_arp(addresses, output); // JUST FOR TEST ?
+	//(MOVED TO arp_reply) process_ethernet(output, 42); // JUST FOR TEST ?
 	while (1)
 	{
 		buflen = recvfrom(fd, buffer, 65536, 0, &saddr, (socklen_t *)&saddr_len);

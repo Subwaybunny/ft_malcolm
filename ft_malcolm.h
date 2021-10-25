@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:20:48 by jragot            #+#    #+#             */
-/*   Updated: 2021/10/25 18:32:13 by jragot           ###   ########.fr       */
+/*   Updated: 2021/10/25 19:26:53 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,13 @@ void	        exit_error(const char *message);            // MOVE TO LIBFT
 void	        requirements(int ac, char **av);
 void            process_ethernet(unsigned char *buffer, ssize_t buflen);
 void            process_arp(unsigned char *buffer, ssize_t buflen);
+void	        arp_reply(struct arp_ip *request);
 void	        print_buffer(unsigned char *buffer, ssize_t buflen);
 void	        print_raw_data(unsigned char *buffer);
 void            ft_putlen(unsigned char* str, ssize_t len);
 char	        hextobyte(const char *hex);
 //unsigned char	*craft_arp(const char *sip, unsigned char *raw_arp);
-unsigned char	*craft_arp(struct addr_set addresses, unsigned char *output);
+unsigned char	*craft_arp(unsigned char *output);
 struct hostent  *gethost(const char *name);
 struct ifaddrs  *getinterface(struct ifaddrs *iflist,const char *name);
 /* SUPPORT FOR FT_SPLIT */
