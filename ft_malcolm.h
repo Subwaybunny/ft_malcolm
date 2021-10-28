@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:20:48 by jragot            #+#    #+#             */
-/*   Updated: 2021/10/25 19:26:53 by jragot           ###   ########.fr       */
+/*   Updated: 2021/10/28 17:28:44 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	        print_mac(unsigned char *bin);
 void	        exit_error(const char *message);            // MOVE TO LIBFT
 void	        requirements(int ac, char **av);
 void            process_ethernet(unsigned char *buffer, ssize_t buflen);
-void            process_arp(unsigned char *buffer, ssize_t buflen);
+void            process_arp(unsigned char *buffer);
 void	        arp_reply(struct arp_ip *request);
 void	        print_buffer(unsigned char *buffer, ssize_t buflen);
 void	        print_raw_data(unsigned char *buffer);
