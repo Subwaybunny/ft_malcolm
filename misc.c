@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 19:28:05 by jragot            #+#    #+#             */
-/*   Updated: 2021/09/29 15:40:11 by jragot           ###   ########.fr       */
+/*   Updated: 2021/11/02 01:42:16 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ void	print_raw_data(unsigned char *buffer)
 
 void	print_buffer(unsigned char *buffer, ssize_t buflen)
 {
-//	printf("\nprint_buffer called with buflen=%d", buflen);
 	ssize_t i = 0;
 
 	printf("\n");

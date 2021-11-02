@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:20:48 by jragot            #+#    #+#             */
-/*   Updated: 2021/10/28 17:28:44 by jragot           ###   ########.fr       */
+/*   Updated: 2021/11/02 01:39:12 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@
 # include <arpa/inet.h>
 # include <net/ethernet.h>
 # include <net/if_arp.h>
+# include <linux/if_packet.h>
 # include <ifaddrs.h>
+# define ETH0 2
+# define WLAN0 3
 
 struct arp_ip
 {
@@ -62,13 +65,9 @@ void	        print_buffer(unsigned char *buffer, ssize_t buflen);
 void	        print_raw_data(unsigned char *buffer);
 void            ft_putlen(unsigned char* str, ssize_t len);
 char	        hextobyte(const char *hex);
-//unsigned char	*craft_arp(const char *sip, unsigned char *raw_arp);
 unsigned char	*craft_arp(unsigned char *output);
 struct hostent  *gethost(const char *name);
 struct ifaddrs  *getinterface(struct ifaddrs *iflist,const char *name);
 /* SUPPORT FOR FT_SPLIT */
 char            **ft_split(char const *s, char c);
-//static int      strlen_split_j(char const *s, char c, int i);
-//static int      strlen_split_i(char const *s, char c);
-//static void     fill_tab(char const *s, char *tab, int k, char c);
 #endif

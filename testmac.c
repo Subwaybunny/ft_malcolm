@@ -34,7 +34,7 @@ char	hextobyte(const char *hex)
 {
 	/* Translate ASCII value into binary */
 	char left = (hex[0] < 'a') ? hex[0] - 48 : hex[0] - 87;
-	char right = (hex[1] < 'a') ? hex[1] - 48 : hex[0] - 87;
+	char right = (hex[1] < 'a') ? hex[1] - 48 : hex[1] - 87;
 
 	/* Join the two values into a single byte */
 	return ((left << 4) + right);
@@ -58,24 +58,7 @@ void	feed_bin(unsigned char *bin, const char *hex)
 	while (*tab)
 		*bin++ = hextobyte(*tab++);
 }
-/*
-void	feed_bin(unsigned char *bin, const char *hex)
-{
-	ssize_t size = 17;
-	unsigned char tmp[17];
-	char **tab = NULL;
 
-	bzero(tmp, 17);		// LIBC
-	while (size)
-	{
-		tmp[size] = tolower(hex[size]); // LIBC
-		--size;
-	}
-	tab = ft_split(hex, ':');
-	while (*tab)
-		*bin++ = hextobyte(*tab++);
-}
-*/
 void	print_mac(unsigned char *bin)
 {
 	printf("MAC address: %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\n", bin[0], bin[1], bin[2], bin[3], bin[4], bin[5]);

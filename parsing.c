@@ -6,16 +6,10 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:21:14 by jragot            #+#    #+#             */
-/*   Updated: 2021/09/29 16:45:31 by jragot           ###   ########.fr       */
+/*   Updated: 2021/11/02 01:42:38 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <ctype.h>
-//#include <string.h>
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include "ft_split.c"
-//#include "count_tab.c"
 #include "ft_malcolm.h"
 
 int	isbase16(char c)
@@ -56,20 +50,3 @@ void	print_mac(unsigned char *bin)
 {
 	printf("MAC address: %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\n", bin[0], bin[1], bin[2], bin[3], bin[4], bin[5]);
 }
-/*
-int main(int ac, char **av)
-{
-	if (ac == 2)
-	{
-		if (is_valid_mac(av[1]) < 0)
-		{
-			printf("Invalid MAC address");
-			return (-1);
-		}
-		unsigned char bin[12] = {0};
-		feed_bin(bin, av[1]);
-		print_mac(bin);
-	}
-	return (0);
-}
-*/
