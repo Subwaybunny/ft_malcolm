@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:20:48 by jragot            #+#    #+#             */
-/*   Updated: 2021/11/02 01:39:12 by jragot           ###   ########.fr       */
+/*   Updated: 2021/12/12 05:04:04 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,26 @@ struct addr_set
     in_addr_t sip;                   /* Source IP address */
 };
 
-size_t          count_tab(char **tab);                      // MOVE TO LIBfT
-int             isbase16(char c);                           // MOVE TO LIBFT
+struct project
+{
+    struct addr_set addresses;
+    struct ifaddrs *iflist;
+    int waiting_for_reply;
+    int fd;
+};
+
+int             ft_tolower(int c);
+int             ft_strcmp(const char *s1, const char *s2);
+int             isbase16(char c);
 int             is_valid_mac(const char *addr);
 int             is_valid_ipv4(const char *addr);
+void            *ft_memset(void *s, int c, size_t n);
+void            *ft_memcpy(void *dst, const void *src, size_t n);
 void            sig_handler(int sig);
-void            ft_putlen(unsigned char* str, ssize_t len); // MOVE TO LIBFT
+void            ft_putlen(unsigned char* str, ssize_t len);
 void	        feed_bin(unsigned char *bin, const char *hex);
 void	        print_mac(unsigned char *bin);
-void	        exit_error(const char *message);            // MOVE TO LIBFT
+void 	        exit_error(const char *message);
 void	        requirements(int ac, char **av);
 void            process_ethernet(unsigned char *buffer, ssize_t buflen);
 void            process_arp(unsigned char *buffer);
@@ -68,6 +79,4 @@ char	        hextobyte(const char *hex);
 unsigned char	*craft_arp(unsigned char *output);
 struct hostent  *gethost(const char *name);
 struct ifaddrs  *getinterface(struct ifaddrs *iflist,const char *name);
-/* SUPPORT FOR FT_SPLIT */
-char            **ft_split(char const *s, char c);
 #endif
