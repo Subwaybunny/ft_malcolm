@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:20:48 by jragot            #+#    #+#             */
-/*   Updated: 2021/12/12 05:04:04 by jragot           ###   ########.fr       */
+/*   Updated: 2021/12/12 05:21:43 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ int             is_valid_ipv4(const char *addr);
 void            *ft_memset(void *s, int c, size_t n);
 void            *ft_memcpy(void *dst, const void *src, size_t n);
 void            sig_handler(int sig);
-void            ft_putlen(unsigned char* str, ssize_t len);
 void	        feed_bin(unsigned char *bin, const char *hex);
 void	        print_mac(unsigned char *bin);
 void 	        exit_error(const char *message);
@@ -73,8 +72,6 @@ void            process_ethernet(unsigned char *buffer, ssize_t buflen);
 void            process_arp(unsigned char *buffer);
 void	        arp_reply(struct arp_ip *request);
 void	        print_buffer(unsigned char *buffer, ssize_t buflen);
-void	        print_raw_data(unsigned char *buffer);
-void            ft_putlen(unsigned char* str, ssize_t len);
 char	        hextobyte(const char *hex);
 unsigned char	*craft_arp(unsigned char *output);
 struct hostent  *gethost(const char *name);
