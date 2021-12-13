@@ -6,11 +6,13 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 19:28:05 by jragot            #+#    #+#             */
-/*   Updated: 2021/12/12 05:05:38 by jragot           ###   ########.fr       */
+/*   Updated: 2021/12/13 05:54:12 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_malcolm.h"
+
+extern struct project g_project;
 
 int count_token(char token, const char *str)
 {
@@ -42,6 +44,24 @@ void *ft_memset(void *s, int c, size_t n)
 	return (s);
 }
 
+int	ft_memcmp(const void *s1, const void *s2, size_t n)
+{
+	unsigned char *t1;
+	unsigned char *t2;
+
+	t1 = (unsigned char*)s1;
+	t2 = (unsigned char*)s2;
+	while (n--)
+	{
+		if (*t1 != *t2)
+			return (*t1 - *t2);
+		++t1;
+		++t2;
+	}
+	return (0);
+}
+
+
 void *ft_memcpy(void *dst, const void *src, size_t n)
 {
 	char		*dst_cpy;
@@ -65,7 +85,7 @@ int ft_strcmp(const char *s1, const char *s2)
     return (*(unsigned char *)s1 - *(unsigned char *)s2);
 }
 
-int		isbase16(char c)
+int	isbase16(char c)
 {
 	if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))
 		return (1);
@@ -149,8 +169,9 @@ int is_valid_mac(const char *addr)
 
 void	requirements(int ac, char **av)
 {
-	if (ac != 5)
-		exit_error("Usage: ft_malcolm <source IP> <source MAC> <target IP> <target MAC>");
+	g_project.verbose = (ac == 6 && ft_strcmp(av[5], "-v") == 0) ? 1 : 0;
+	if (!(ac == 5 || (ac == 6 && g_project.verbose)))
+		exit_error("Usage: ft_malcolm <source IP> <source MAC> <target IP> <target MAC> [-v]");
 	if (getuid() != 0)
 		exit_error("Error: This program must be run as root/sudo user.");
 	if (is_valid_ipv4(av[1]) != 0)
@@ -173,7 +194,7 @@ char	hextobyte(const char *hex)
 	return ((left << 4) + right);
 }
 
-void	feed_bin(unsigned char *bin, const char *hex)
+void	mac_strbin(unsigned char *bin, const char *hex)
 {
 	ssize_t size = 0;
 	char tmp[17] = {0};
