@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:21:21 by jragot            #+#    #+#             */
-/*   Updated: 2021/12/14 13:14:03 by jragot           ###   ########.fr       */
+/*   Updated: 2021/12/14 15:00:41 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	initialize_device(struct sockaddr_ll *device)
 {
 	ft_memset(device, 0, sizeof(struct sockaddr_ll));
 	device->sll_family = AF_PACKET;
-	device->sll_ifindex = WLAN0; 	// Check this before submitting project
+	device->sll_ifindex = ETH0;
 	device->sll_halen = ETH_ALEN;
 	device->sll_protocol = htons(ETH_P_ARP);
 	ft_memcpy(device->sll_addr, &g_project.addresses.tmac, ETH_ALEN);
@@ -88,13 +88,12 @@ void	arp_reply(struct arp_ip *request)
 	}
 	else
 	{
-		printf("\e[0m\nSending spoofed response (\"%d.%d.%d.%d is at %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\")", 
+		printf("\e[0m\nSending spoofed response (\"%d.%d.%d.%d is at %.2x:%.2x:%.2x:%.2x:%.2x:%.2x\")\n", 
 		request->ar_tip[0], request->ar_tip[1], request->ar_tip[2], request->ar_tip[3],
 		g_project.addresses.smac[0], g_project.addresses.smac[1], g_project.addresses.smac[2], g_project.addresses.smac[3],g_project.addresses.smac[4], g_project.addresses.smac[5]);
 	}
 	if ((bytes_sent = sendto(g_project.fd, reply_output, sizeof(reply_output), 0, (struct sockaddr *)&device, sizeof(device)) < 0))
-		//exit_error("\nError sending poisoned response");
-		perror("error");
+		exit_error("\nError sending poisoned response");
 	g_project.waiting_for_reply = 0;
 }
 
