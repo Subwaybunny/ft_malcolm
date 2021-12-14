@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:21:21 by jragot            #+#    #+#             */
-/*   Updated: 2021/12/13 05:37:51 by jragot           ###   ########.fr       */
+/*   Updated: 2021/12/14 13:14:03 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ void	arp_reply(struct arp_ip *request)
 		g_project.addresses.smac[0], g_project.addresses.smac[1], g_project.addresses.smac[2], g_project.addresses.smac[3],g_project.addresses.smac[4], g_project.addresses.smac[5]);
 	}
 	if ((bytes_sent = sendto(g_project.fd, reply_output, sizeof(reply_output), 0, (struct sockaddr *)&device, sizeof(device)) < 0))
-		exit_error("Error sending poisoned response");
+		//exit_error("\nError sending poisoned response");
+		perror("error");
 	g_project.waiting_for_reply = 0;
 }
 
