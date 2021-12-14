@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:21:52 by jragot            #+#    #+#             */
-/*   Updated: 2021/12/13 05:54:27 by jragot           ###   ########.fr       */
+/*   Updated: 2021/08/15 21:32:38 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	main(int ac, char **av)
 		exit_error("Error opening a socket");
 	if ((getifaddrs(&g_project.iflist) < 0))
 		exit_error("Error: Failed to fetch interfaces");
-	if ((interface = getinterface(g_project.iflist, "wlan0"))) // Check this before submitting project
+	if ((interface = getinterface(g_project.iflist, INTERFACE))) // Check this before submitting project
 		printf("Working on interface %s.\n", interface->ifa_name);
 	ft_memset(buffer, 0, sizeof(buffer));
 	ft_memset(&g_project.addresses, 0, sizeof(g_project.addresses));

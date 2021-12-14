@@ -6,7 +6,7 @@
 /*   By: jragot <jragot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/15 21:20:48 by jragot            #+#    #+#             */
-/*   Updated: 2021/12/13 05:54:33 by jragot           ###   ########.fr       */
+/*   Updated: 2021/08/15 21:33:11 by jragot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <net/if_arp.h>
 # include <linux/if_packet.h>
 # include <ifaddrs.h>
+# define INTERFACE "wlan0"
 # define ETH0 2
 # define WLAN0 3
 
